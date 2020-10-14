@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Data from "./Data"
 
 function App() {
@@ -11,11 +11,24 @@ function App() {
   const [pressure, setPressure] = useState("")
   const [wind, setWind] = useState("")
   const [celsius, setCelsius] = useState(true);
-
+  // const [background, setBackground] = useState("")
   function changeHandler(e) {
     setInput(e.target.value)
   }
- 
+  useEffect(() => {
+    if (weather === "") {
+      return
+    }
+    let str = 'https://api.giphy.com/v1/gifs/translate?api_key=JV0YX3JjmxHqi9SsHqRv2V80Bxms3vTt&s=' + weather;
+    fetch(str, {mode: "cors"})
+    .then(function(response) {
+      return response.json()
+    })
+    .then(function(gif) {
+      console.log(gif)
+      document.body.style.backgroundImage = "url(" + gif.data.images.original.url + ")";
+    })
+  }, [weather])
  async function submitHandler(e) {
     e.preventDefault()
     console.log("hey")
