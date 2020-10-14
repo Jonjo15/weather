@@ -22,9 +22,14 @@ function App() {
     if (input === "") {
       return
     }
-    await getWeatherData(input)
+    await getWeatherData(input).catch(function(err) {showError()})
     //setData somehow
     setInput("")
+  }
+  function showError() {
+    const span = document.querySelector(".error")
+    span.textContent = "City not found, try again."
+    setTimeout(() => {span.textContent = ""}, 1500)
   }
   function handleUnits(e) {
     let prevCelsius = celsius
@@ -61,11 +66,13 @@ function App() {
   return (
     <div className="App">
         <h1>Weather App</h1>
-        <button onClick={handleUnits}>Switch to {celsius ? "°F" : "°C"}</button>
+        <div><button id="switch" onClick={handleUnits}>Switch to {celsius ? "°F" : "°C"}</button></div>
+        
         <form onSubmit={submitHandler}>
           <input value={input} type="text" placeholder="Enter city name" onChange={changeHandler}/>
           <button>Submit</button>
         </form>
+        <span className="error"></span>
         <Data celsius={celsius} name={name} country={country} temp={temp} wind={wind} pressure={pressure} feel={feel} weather={weather}/>
     </div>
   );
